@@ -1,0 +1,12 @@
+.page-banner[aria-hidden='true'] {
+    display: none;
+}
+
+.page-banner {
+    display: flex;
+    flex-direction: row;
+}
+
+.page-banner-content {
+    flex-grow: 1;
+}

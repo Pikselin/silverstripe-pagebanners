@@ -5,18 +5,27 @@ namespace Pikselin\PageBanners\extensions;
 use Pikselin\PageBanners\DataObjects\PageBanner;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\View\ArrayData;
+use SilverStripe\View\Requirements;
 
 class BaseSiteTreeExtension extends DataExtension {
 
     public function PageBanners() {
-
-        $extraFilters = [
-            'StartTime:LessThan' => date('Y-m-d H:i:s'),
-            'EndTime:GreaterThan' => date('Y-m-d H:i:s'),
-        ];
+        Requirements::css('pikselin/silverstripe-pagebanners: client/css/pagebanners.css');
+        Requirements::javascript('pikselin/silverstripe-pagebanners: client/javascript/pagebanners.js');        
+        
+        
         $banners = PageBanner::get()
                 ->filterAny(['isGlobal' => '1', 'PageID' => $this->owner->ID])
-                ->filter($extraFilters);
+                ->filterByCallback(function ($item, $list) {
+                    if ($item->TimeSensitive == 0) {
+                        return true;
+                    } else if ($item->TimeSensitive == 1 && strtotime($item->StartTime) < strtotime(date('Y-m-d H:i:s')) && strtotime($item->EndTime) > strtotime(date('Y-m-d H:i:s'))
+                    ) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
 
         if ($banners) {
             $arrayData = new ArrayData([

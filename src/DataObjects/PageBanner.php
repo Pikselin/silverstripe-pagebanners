@@ -3,6 +3,8 @@
 namespace Pikselin\PageBanners\DataObjects {
 
     use Page;
+    use gorriecoe\Link\Models\Link;
+    use gorriecoe\LinkField\LinkField;    
     use SilverStripe\CMS\Model\SiteTree;
     use SilverStripe\Forms\CheckboxField;
     use SilverStripe\Forms\DatetimeField;
@@ -33,7 +35,8 @@ namespace Pikselin\PageBanners\DataObjects {
         );
         private static $has_one = array(
             'Page' => Page::class,
-            'LinksTo' => Page::class
+            //'LinksTo' => Page::class,
+            'LinksTo' => Link::class
         );
         private static $summary_fields = array(
             'Text' => 'Text',
@@ -82,6 +85,10 @@ namespace Pikselin\PageBanners\DataObjects {
                 ),
             );
         }
+        
+        public function onBeforeWrite() {
+            parent::onBeforeWrite();
+        }
 
         public function getCMSFields() {
             $fields = parent::getCMSFields();
@@ -100,8 +107,16 @@ namespace Pikselin\PageBanners\DataObjects {
 
             $TargetPage = Wrapper::create(TreeDropdownField::create('PageID', 'Display On Page', SiteTree::class))->displayUnless('isGlobal')->isChecked()->end();
 
-            $LinksTo = TreeDropdownField::create('LinksToID', 'Alert link', SiteTree::class);
-            $LinksTo->setDescription('Optionally link this alert to another page in the site');
+            $LinksToConfig = [
+                'types' => [
+                    'SiteTree' => TRUE,
+                    'URL' => TRUE,
+                    'Email' => TRUE,
+                    'Phone' => TRUE,
+                    'File' => TRUE,
+                ],
+            ];
+            $LinksTo = LinkField::create('LinksTo', 'Banner link', $this, $LinksToConfig)->setDescription('Optionally link this alert to another page in the site.');
 
             $TimeSensitive = CheckboxField::create('TimeSensitive', 'Time sensitive');
             $TimeSensitive->setDescription('Should this banner only be displayed between certain dates?');
