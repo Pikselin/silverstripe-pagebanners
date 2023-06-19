@@ -18,6 +18,6 @@ Simple CSS for laying out the banners is included.
 ## Adding to your templates
 This module uses an extension on SiteTree and an internal template render call. Just use
 
-``$PageBanners
+` $PageBanners
 
 In your template to add them in.
