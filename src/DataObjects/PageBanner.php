@@ -93,8 +93,8 @@ namespace Pikselin\PageBanners\DataObjects {
 
             $Dismiss = CheckboxField::create('Dismiss', 'Can be closed')->setDescription('Can this banner be closed by the user?');
 
-            $isGlobal = CheckboxField::create('isGlobal', 'Global banner');
-            $isGlobal->setDescription('Global banners will be displayed on every page.');
+            $IsGlobal = CheckboxField::create('isGlobal', 'Global banner');
+            $IsGlobal->setDescription('Global banners will be displayed on every page.');
 
             $Text = TextareaField::create('Text', 'Banner Text');
 
@@ -106,11 +106,11 @@ namespace Pikselin\PageBanners\DataObjects {
             $TimeSensitive = CheckboxField::create('TimeSensitive', 'Time sensitive');
             $TimeSensitive->setDescription('Should this banner only be displayed between certain dates?');
 
-            $dateTimeExplain = Wrapper::create(LiteralField::create('dateTimeExplain',
+            $DateTimeExplain = Wrapper::create(LiteralField::create('dateTimeExplain',
                                     'Only show this alert between these times. Enter time format in simple 24h notation, eg <strong>15:30</strong>, Start and End date/times are required. If none are entered then the alert will never show.'
                             ))->displayIf('TimeSensitive')->isChecked()->end();
 
-            $dateTimeFields = [];
+            $DateTimeFields = [];
 
             $startTimeField = DatetimeField::create('StartTime', 'Start Date/Time');
             $startTimeField->setValue(date('Y-m-d H:i')); // requires ->setHTML5(false)
@@ -118,9 +118,9 @@ namespace Pikselin\PageBanners\DataObjects {
             $endTimeField = DatetimeField::create('EndTime', 'End Date/Time');
             $endTimeField->setValue(date('Y-m-d H:i', strtotime('now +1 Month'))); // requires ->setHTML5(false)
 
-            $dateTimeFields[] = $startTimeField;
-            $dateTimeFields[] = $endTimeField;
-            $dateTimeField = Wrapper::create(FieldGroup::create('Date and time', $dateTimeFields))->displayIf('TimeSensitive')->isChecked()->end();
+            $DateTimeFields[] = $startTimeField;
+            $DateTimeFields[] = $endTimeField;
+            $DateTimeField = Wrapper::create(FieldGroup::create('Date and time', $DateTimeFields))->displayIf('TimeSensitive')->isChecked()->end();
 
             $alerts = array();
             $currentMember = Member::currentUser();
@@ -138,15 +138,15 @@ namespace Pikselin\PageBanners\DataObjects {
                             'Type of alert',
                             $alerts
             );
-            $fields->addFieldToTab('Root.Main', $isGlobal);
+            $fields->addFieldToTab('Root.Main', $IsGlobal);
             $fields->addFieldToTab('Root.Main', $TargetPage);
             $fields->addFieldToTab('Root.Main', $Type);
             $fields->addFieldToTab('Root.Main', $Text);
             $fields->addFieldToTab('Root.Main', $LinksTo);
             $fields->addFieldToTab('Root.Main', $Dismiss);
             $fields->addfieldToTab('Root.Main', $TimeSensitive);
-            $fields->addfieldToTab('Root.Main', $dateTimeExplain);
-            $fields->addfieldToTab('Root.Main', $dateTimeField);
+            $fields->addfieldToTab('Root.Main', $DateTimeExplain);
+            $fields->addfieldToTab('Root.Main', $DateTimeField);
 
             return $fields;
         }
