@@ -2,20 +2,20 @@
 
 namespace Pikselin\PageBanners\DataObjects {
 
-use Page;
-use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\Forms\CheckboxField;
-use SilverStripe\Forms\DatetimeField;
-use SilverStripe\Forms\DropdownField;
-use SilverStripe\Forms\FieldGroup;
-use SilverStripe\Forms\LiteralField;
-use SilverStripe\Forms\TextareaField;
-use SilverStripe\Forms\TreeDropdownField;
-use SilverStripe\ORM\DataObject;
-use SilverStripe\Security\Member;
-use SilverStripe\Security\Permission;
-use SilverStripe\Security\PermissionProvider;
-use UncleCheese\DisplayLogic\Forms\Wrapper;
+    use Page;
+    use SilverStripe\CMS\Model\SiteTree;
+    use SilverStripe\Forms\CheckboxField;
+    use SilverStripe\Forms\DatetimeField;
+    use SilverStripe\Forms\DropdownField;
+    use SilverStripe\Forms\FieldGroup;
+    use SilverStripe\Forms\LiteralField;
+    use SilverStripe\Forms\TextareaField;
+    use SilverStripe\Forms\TreeDropdownField;
+    use SilverStripe\ORM\DataObject;
+    use SilverStripe\Security\Member;
+    use SilverStripe\Security\Permission;
+    use SilverStripe\Security\PermissionProvider;
+    use UncleCheese\DisplayLogic\Forms\Wrapper;
 
     class PageBanner extends DataObject implements PermissionProvider {
 
@@ -35,7 +35,6 @@ use UncleCheese\DisplayLogic\Forms\Wrapper;
             'Page' => Page::class,
             'LinksTo' => Page::class
         );
-
         private static $summary_fields = array(
             'Text' => 'Text',
             'Type' => 'Type',
@@ -44,7 +43,6 @@ use UncleCheese\DisplayLogic\Forms\Wrapper;
             'StartTime' => 'Show from',
             'EndTime' => 'until'
         );
-        
         private static $table_name = 'PageBanners';
 
         public function canView($member = null) {
@@ -92,31 +90,26 @@ use UncleCheese\DisplayLogic\Forms\Wrapper;
             $fields->removeByName('StartTime');
             $fields->removeByName('EndTime');
             $fields->removeByName('PageID');
-            
-            
+
             $Dismiss = CheckboxField::create('Dismiss', 'Can be closed')->setDescription('Can this banner be closed by the user?');
-            
-            
+
             $isGlobal = CheckboxField::create('isGlobal', 'Global banner');
             $isGlobal->setDescription('Global banners will be displayed on every page.');
 
             $Text = TextareaField::create('Text', 'Banner Text');
 
             $TargetPage = Wrapper::create(TreeDropdownField::create('PageID', 'Display On Page', SiteTree::class))->displayUnless('isGlobal')->isChecked()->end();
-            
+
             $LinksTo = TreeDropdownField::create('LinksToID', 'Alert link', SiteTree::class);
             $LinksTo->setDescription('Optionally link this alert to another page in the site');
 
-            
             $TimeSensitive = CheckboxField::create('TimeSensitive', 'Time sensitive');
-            $TimeSensitive->setDescription('Should this banner only be displayed between certain dates?');            
-            
+            $TimeSensitive->setDescription('Should this banner only be displayed between certain dates?');
+
             $dateTimeExplain = Wrapper::create(LiteralField::create('dateTimeExplain',
-                    'Only show this alert between these times. Enter time format in simple 24h notation, eg <strong>15:30</strong>, Start and End date/times are required. If none are entered then the alert will never show.'
-            ))->displayIf('TimeSensitive')->isChecked()->end();            
-            
-            
-            
+                                    'Only show this alert between these times. Enter time format in simple 24h notation, eg <strong>15:30</strong>, Start and End date/times are required. If none are entered then the alert will never show.'
+                            ))->displayIf('TimeSensitive')->isChecked()->end();
+
             $dateTimeFields = [];
 
             $startTimeField = DatetimeField::create('StartTime', 'Start Date/Time');
@@ -128,7 +121,7 @@ use UncleCheese\DisplayLogic\Forms\Wrapper;
             $dateTimeFields[] = $startTimeField;
             $dateTimeFields[] = $endTimeField;
             $dateTimeField = Wrapper::create(FieldGroup::create('Date and time', $dateTimeFields))->displayIf('TimeSensitive')->isChecked()->end();
-            
+
             $alerts = array();
             $currentMember = Member::currentUser();
             if (Permission::check('ALERT_NOTICE', 'any', $currentMember)) {
@@ -141,9 +134,9 @@ use UncleCheese\DisplayLogic\Forms\Wrapper;
                 $alerts['Info'] = 'Information';
             }
             $Type = DropdownField::create(
-                    'Type',
-                    'Type of alert',
-                    $alerts
+                            'Type',
+                            'Type of alert',
+                            $alerts
             );
             $fields->addFieldToTab('Root.Main', $isGlobal);
             $fields->addFieldToTab('Root.Main', $TargetPage);
@@ -164,17 +157,7 @@ use UncleCheese\DisplayLogic\Forms\Wrapper;
 
         public function getIsDismissNice() {
             return $this->Dismiss == 1 ? 'Yes' : 'No';
-        }        
-        
-        /**
-         * Display the DisplayInBlock data in the summary nicely.
-         *
-         * @return string
-         */
-        // add this field in an extension in a PageBanners elemental block module
-//        public function getDisplayInBlockNice() {
-//            return $this->DisplayInBlock == 1 ? 'Yes' : 'No';
-//        }
+        }
 
     }
 
