@@ -1,0 +1,7 @@
+---
+Name: pikselin-page-banners
+after: '*'
+---
+SilverStripe\CMS\Model\SiteTree:
+  extensions:
+    - Pikselin\PageBanners\extensions\BaseSiteTreeExtension

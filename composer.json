@@ -1,0 +1,32 @@
+{
+    "name": "pikselin/silverstripe-pagebanners",
+    "type": "silverstripe-vendormodule",
+    "description": "Add page or site level alert banners to a Silverstripe site.",
+    "keywords": [
+        "silverstripe",
+        "alerts"
+    ],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Ash Etchell",
+            "homepage": "https://github.com/Pikselin",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "silverstripe/cms": "^4",
+        "silverstripe/framework": "^4",
+        "silverstripe/display-logic": "^2.0"
+    },
+    "config": {
+        "process-timeout": 600
+    },
+    "extra": {
+        "expose": [
+            "client"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
