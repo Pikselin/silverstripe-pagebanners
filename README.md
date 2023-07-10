@@ -38,3 +38,5 @@ In your template to add them in.
             }
         }
     }
+# Credits
+Javascript to control banner visibility taken from [silverstripe/silverstripe-banner](https://github.com/silverstripe/silverstripe-sitebanner)
