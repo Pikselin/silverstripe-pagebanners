@@ -11,14 +11,14 @@ use SilverStripe\Admin\ModelAdmin;
  */
 class PageBannerAdmin extends ModelAdmin
 {
-    private static $icon = 'font-icon-attention';
-    private static $menu_icon_class = 'font-icon-attention';
+    private static string $icon = 'font-icon-attention';
+    private static string $menu_icon_class = 'font-icon-attention';
 
     /**
      *
      * @var array
      */
-    private static $managed_models = array(
+    private static array $managed_models = array(
         PageBanner::class
     );
 
@@ -26,11 +26,11 @@ class PageBannerAdmin extends ModelAdmin
      *
      * @var string
      */
-    private static $url_segment = 'page-banners';
+    private static string $url_segment = 'page-banners';
 
     /**
      *
      * @var string
      */
-    private static $menu_title = 'Page banners';
+    private static string $menu_title = 'Page banners';
 }

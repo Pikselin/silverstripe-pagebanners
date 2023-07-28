@@ -10,13 +10,14 @@ use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DatetimeField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldGroup;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
+use SilverStripe\Security\Security;
 use UncleCheese\DisplayLogic\Forms\Wrapper;
 
 /**
@@ -36,10 +37,10 @@ use UncleCheese\DisplayLogic\Forms\Wrapper;
  */
 class PageBanner extends DataObject implements PermissionProvider
 {
-    private static $singular_name = 'Page banner';
-    private static $default_sort = 'LastEdited Desc';
-    private static $icon = 'font-icon-attention';
-    private static $db = array(
+    private static string $singular_name = 'Page banner';
+    private static string $default_sort = 'LastEdited Desc';
+    private static string $icon = 'font-icon-attention';
+    private static array $db = array(
         'Text'          => 'Text',
         'Type'          => "Enum('Notice, Warning, Info','Info')",
         'isGlobal'      => 'Boolean',
@@ -48,12 +49,12 @@ class PageBanner extends DataObject implements PermissionProvider
         'Dismiss'       => 'Boolean',
         'TimeSensitive' => 'Boolean'
     );
-    private static $has_one = array(
+    private static array $has_one = array(
         'Page'    => Page::class,
         //'LinksTo' => Page::class,
         'LinksTo' => Link::class
     );
-    private static $summary_fields = array(
+    private static array $summary_fields = array(
         'Text'          => 'Text',
         'Type'          => 'Type',
         'IsGlobalNice'  => 'Global Message',
@@ -61,9 +62,9 @@ class PageBanner extends DataObject implements PermissionProvider
         'StartTime'     => 'Show from',
         'EndTime'       => 'until'
     );
-    private static $table_name = 'PageBanners';
+    private static string $table_name = 'PageBanners';
 
-    public function canView($member = null)
+    public function canView($member = null): bool
     {
         return true;
     }
@@ -83,7 +84,7 @@ class PageBanner extends DataObject implements PermissionProvider
         return Permission::check('ALERT_CREATE');
     }
 
-    public function providePermissions()
+    public function providePermissions(): array
     {
         return array(
             'ALERT_CREATE'  => array(
@@ -111,7 +112,7 @@ class PageBanner extends DataObject implements PermissionProvider
         parent::onBeforeWrite();
     }
 
-    public function getCMSFields()
+    public function getCMSFields(): FieldList
     {
         $fields = parent::getCMSFields();
         $fields->removeByName('Title');
@@ -119,6 +120,7 @@ class PageBanner extends DataObject implements PermissionProvider
         $fields->removeByName('StartTime');
         $fields->removeByName('EndTime');
         $fields->removeByName('PageID');
+        $fields->removeByName('LinksToID');
 
         $Dismiss = CheckboxField::create('Dismiss', 'Can be closed')->setDescription('Can this banner be closed by the user?');
 
@@ -161,7 +163,7 @@ class PageBanner extends DataObject implements PermissionProvider
         $DateTimeField = Wrapper::create(FieldGroup::create('Date and time', $DateTimeFields))->displayIf('TimeSensitive')->isChecked()->end();
 
         $alerts = array();
-        $currentMember = Member::currentUser();
+        $currentMember = Security::getCurrentUser();
         if (Permission::check('ALERT_NOTICE', 'any', $currentMember)) {
             $alerts['Notice'] = 'Notice';
         }
@@ -189,12 +191,12 @@ class PageBanner extends DataObject implements PermissionProvider
         return $fields;
     }
 
-    public function getIsGlobalNice()
+    public function getIsGlobalNice(): string
     {
         return $this->isGlobal == 1 ? 'Yes' : 'No';
     }
 
-    public function getIsDismissNice()
+    public function getIsDismissNice(): string
     {
         return $this->Dismiss == 1 ? 'Yes' : 'No';
     }
