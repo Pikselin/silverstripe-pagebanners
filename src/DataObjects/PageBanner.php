@@ -137,7 +137,7 @@ class PageBanner extends DataObject implements PermissionProvider
 
         $TargetPage = Wrapper::create(TreeDropdownField::create('PageID', 'Display On Page', SiteTree::class))->displayUnless('isGlobal')->isChecked()->end();
 
-        $LinksTo = LinkField::create('LinksTo', 'Banner link')->setDescription('Optionally link this alert to another page in the site.');
+        $LinksTo = LinkField::create('LinksTo', 'Banner link', $this)->setDescription('Optionally link this alert to another page in the site.');
 
         $TimeSensitive = CheckboxField::create('TimeSensitive', 'Time sensitive');
         $TimeSensitive->setDescription('Should this banner only be displayed between certain dates?');
