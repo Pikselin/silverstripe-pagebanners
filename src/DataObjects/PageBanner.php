@@ -19,6 +19,12 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;
 use UncleCheese\DisplayLogic\Forms\Wrapper;
+use SilverStripe\ORM\FieldType\DBBoolean;
+use SilverStripe\ORM\FieldType\DBDatetime;
+use SilverStripe\ORM\FieldType\DBEnum;
+use SilverStripe\ORM\FieldType\DBVarchar;
+use SilverStripe\ORM\FieldType\DBText;
+use BucklesHusky\FontAwesomeIconPicker\Forms\FAPickerField;
 
 /**
  * Class \Pikselin\PageBanners\DataObjects\PageBanner
@@ -41,17 +47,17 @@ class PageBanner extends DataObject implements PermissionProvider
     private static string $default_sort = 'LastEdited Desc';
     private static string $icon = 'font-icon-attention';
     private static array $db = array(
-        'Text'          => 'Text',
-        'Type'          => "Enum('Notice, Warning, Info','Info')",
-        'isGlobal'      => 'Boolean',
-        'StartTime'     => 'Datetime',
-        'EndTime'       => 'Datetime',
-        'Dismiss'       => 'Boolean',
-        'TimeSensitive' => 'Boolean'
+        'FAIcon'        => DBVarchar::class,
+        'Text'          => DBText::class,
+        'Type'          => DBEnum::class . '("danger, warning, success, primary, secondary, info, light, dark" "Default")',
+        'isGlobal'      => DBBoolean::class,
+        'StartTime'     => DBDatetime::class,
+        'EndTime'       => DBDatetime::class,
+        'Dismiss'       => DBBoolean::class,
+        'TimeSensitive' => DBBoolean::class,
     );
     private static array $has_one = array(
         'Page'    => Page::class,
-        //'LinksTo' => Page::class,
         'LinksTo' => Link::class
     );
     private static array $summary_fields = array(
@@ -131,16 +137,7 @@ class PageBanner extends DataObject implements PermissionProvider
 
         $TargetPage = Wrapper::create(TreeDropdownField::create('PageID', 'Display On Page', SiteTree::class))->displayUnless('isGlobal')->isChecked()->end();
 
-        $LinksToConfig = [
-            'types' => [
-                'SiteTree' => true,
-                'URL'      => true,
-                'Email'    => true,
-                'Phone'    => true,
-                'File'     => true,
-            ],
-        ];
-        $LinksTo = LinkField::create('LinksTo', 'Banner link', $this, $LinksToConfig)->setDescription('Optionally link this alert to another page in the site.');
+        $LinksTo = LinkField::create('LinksTo', 'Banner link')->setDescription('Optionally link this alert to another page in the site.');
 
         $TimeSensitive = CheckboxField::create('TimeSensitive', 'Time sensitive');
         $TimeSensitive->setDescription('Should this banner only be displayed between certain dates?');
@@ -178,15 +175,18 @@ class PageBanner extends DataObject implements PermissionProvider
             'Type of alert',
             $alerts
         );
-        $fields->addFieldToTab('Root.Main', $IsGlobal);
-        $fields->addFieldToTab('Root.Main', $TargetPage);
-        $fields->addFieldToTab('Root.Main', $Type);
-        $fields->addFieldToTab('Root.Main', $Text);
-        $fields->addFieldToTab('Root.Main', $LinksTo);
-        $fields->addFieldToTab('Root.Main', $Dismiss);
-        $fields->addfieldToTab('Root.Main', $TimeSensitive);
-        $fields->addfieldToTab('Root.Main', $DateTimeExplain);
-        $fields->addfieldToTab('Root.Main', $DateTimeField);
+        $fields->addFieldsToTab('Root.Main', [
+            $IsGlobal,
+            $TargetPage,
+            $Type,
+            FAPickerField::create('FAIcon', 'Font Awesome Icon\'s Name'),
+            $Text,
+            $LinksTo,
+            $Dismiss,
+            $TimeSensitive,
+            $DateTimeExplain,
+            $DateTimeField
+        ]);
 
         return $fields;
     }
