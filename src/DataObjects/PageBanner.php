@@ -49,7 +49,7 @@ class PageBanner extends DataObject implements PermissionProvider
     private static array $db = array(
         'FAIcon'        => DBVarchar::class,
         'Text'          => DBText::class,
-        'Type'          => DBEnum::class . '("danger, warning, success, primary, secondary, info, light, dark" "Default")',
+        'Type'          => DBEnum::class . '("Default, danger, warning, success, primary, secondary, info, light, dark" "Default")',
         'isGlobal'      => DBBoolean::class,
         'StartTime'     => DBDatetime::class,
         'EndTime'       => DBDatetime::class,
