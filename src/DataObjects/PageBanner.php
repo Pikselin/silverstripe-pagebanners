@@ -173,7 +173,7 @@ class PageBanner extends DataObject implements PermissionProvider
         $Type = DropdownField::create(
             'Type',
             'Type of alert',
-            singleton(__CLASS__)->dbObject('Display')->enumValues()
+            singleton(__CLASS__)->dbObject('Type')->enumValues()
         );
         $fields->addFieldsToTab('Root.Main', [
             $IsGlobal,
