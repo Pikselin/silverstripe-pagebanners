@@ -18,7 +18,7 @@
                     <% end_loop %>
 
                     <% if $Dismiss %>
-                        <button type="button" class="btn close float-end" data-dismiss="alert" aria-label="Close" data-id="$ID">
+                        <button type="button" class="btn close float-end" data-bs-dismiss="alert" aria-label="Close" data-id="$ID">
                             <i class="fa-solid fa-circle-xmark fa-xl"></i>
                         </button>
                     <% end_if %>    
