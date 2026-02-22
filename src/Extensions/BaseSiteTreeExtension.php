@@ -4,7 +4,7 @@ namespace Pikselin\PageBanners\extensions;
 
 use Pikselin\PageBanners\DataObjects\PageBanner;
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 
@@ -13,7 +13,7 @@ use SilverStripe\View\Requirements;
  *
  * @property SiteTree|BaseSiteTreeExtension $owner
  */
-class BaseSiteTreeExtension extends DataExtension
+class BaseSiteTreeExtension extends Extension
 {
     public function PageBanners()
     {
