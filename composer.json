@@ -15,10 +15,9 @@
         }
     ],
     "require": {
-        "silverstripe/cms": "^4",
-        "silverstripe/framework": "^4",
-        "gorriecoe/silverstripe-linkfield": "^1.0",
-        "buckleshusky/fontawesomeiconpicker": "^3.0"
+        "silverstripe/cms": "^6",
+        "gorriecoe/silverstripe-linkfield": "^6",
+        "buckleshusky/fontawesomeiconpicker": "^4"
     },
     "config": {
         "process-timeout": 600
