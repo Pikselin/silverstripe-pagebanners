@@ -2,9 +2,8 @@
 
 namespace Pikselin\PageBanners\DataObjects;
 
-use gorriecoe\Link\Models\Link;
-use gorriecoe\LinkField\LinkField;
 use Page;
+use BucklesHusky\FontAwesomeIconPicker\Forms\FAPickerField;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DatetimeField;
@@ -14,17 +13,18 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\Forms\TreeDropdownField;
+use SilverStripe\LinkField\Form\LinkField;
+use SilverStripe\LinkField\Models\Link;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\FieldType\DBBoolean;
+use SilverStripe\ORM\FieldType\DBDatetime;
+use SilverStripe\ORM\FieldType\DBEnum;
+use SilverStripe\ORM\FieldType\DBText;
+use SilverStripe\ORM\FieldType\DBVarchar;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;
 use UncleCheese\DisplayLogic\Forms\Wrapper;
-use SilverStripe\ORM\FieldType\DBBoolean;
-use SilverStripe\ORM\FieldType\DBDatetime;
-use SilverStripe\ORM\FieldType\DBEnum;
-use SilverStripe\ORM\FieldType\DBVarchar;
-use SilverStripe\ORM\FieldType\DBText;
-use BucklesHusky\FontAwesomeIconPicker\Forms\FAPickerField;
 
 /**
  * Class \Pikselin\PageBanners\DataObjects\PageBanner
@@ -59,6 +59,9 @@ class PageBanner extends DataObject implements PermissionProvider
     private static array $has_one = array(
         'Page'    => Page::class,
         'LinksTo' => Link::class
+    );
+    private static array $owns = array(
+        'LinksTo',
     );
     private static array $summary_fields = array(
         'Text'          => 'Text',
@@ -137,7 +140,7 @@ class PageBanner extends DataObject implements PermissionProvider
 
         $TargetPage = Wrapper::create(TreeDropdownField::create('PageID', 'Display On Page', SiteTree::class))->displayUnless('isGlobal')->isChecked()->end();
 
-        $LinksTo = LinkField::create('LinksTo', 'Banner link', $this)->setDescription('Optionally link this alert to another page in the site.');
+        $LinksTo = LinkField::create('LinksTo', 'Banner link')->setDescription('Optionally link this alert to another page in the site.');
 
         $TimeSensitive = CheckboxField::create('TimeSensitive', 'Time sensitive');
         $TimeSensitive->setDescription('Should this banner only be displayed between certain dates?');

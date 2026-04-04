@@ -16,7 +16,7 @@
     ],
     "require": {
         "silverstripe/cms": "^6",
-        "gorriecoe/silverstripe-linkfield": "^6",
+        "silverstripe/linkfield": "^5.1",
         "buckleshusky/fontawesomeiconpicker": "^4"
     },
     "config": {
