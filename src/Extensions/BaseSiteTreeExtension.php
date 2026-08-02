@@ -5,7 +5,7 @@ namespace Pikselin\PageBanners\extensions;
 use Pikselin\PageBanners\DataObjects\PageBanner;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\Extension;
-use SilverStripe\View\ArrayData;
+use SilverStripe\Model\ArrayData;
 use SilverStripe\View\Requirements;
 
 /**
